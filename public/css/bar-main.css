@@ -4,8 +4,8 @@
   height: 100%;
 }
 .album {
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   -o-border-radius: 3px;
@@ -15,6 +15,5 @@
   -o-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
   background: #ededed;
-  margin: 1%;
   display: inline-block;
 }
