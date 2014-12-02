@@ -13,7 +13,7 @@
   .transition(top,0.3s,ease,0.5s);
   top: -@ctr-bar-wrap-height+@ctr-bar-wrap-padding-bottom + 5px;
   left: 0;
-  &:hover {
+  &:hover,&.pin {
     top:0;
   }
 }
@@ -28,40 +28,58 @@
 
 }
 
-.active-breath-ani() {
-  0%
-  {
-    border-bottom-color: lighten(@selected-color,50%);
+.animation(@name,@duration,@interation:infinite) {
+  -webkit-animation-name: @name;
+  -webkit-animation-duration: @duration;
+  -webkit-animation-iteration-count: @interation;
+  -moz-animation-name:@name;
+  -moz-animation-duration:@duration;
+  -moz-animation-iteration-count: @interation;
+  -ms-animation-name:@name;
+  -ms-animation-duration:@duration;
+  -ms-animation-iteration-count: @interation;
+  -o-animation-name:@name;
+  -o-animation-duration:@duration;
+  -o-animation-iteration-count: @interation;
+  animation-name:@name;
+  animation-duration:@duration;
+  animation-iteration-count: @interation;
+}
+
+.keyframes(@name,@key) {
+  @-webkit-keyframes @name {
+    @key();
   }
-  50%
-  {
-    border-bottom-color: lighten(@selected-color,20%);
+  @-moz-keyframes @name {
+    @key();
   }
-  100%
-  {
-    border-bottom-color: lighten(@selected-color,50%);
+  @-ms-keyframes @name {
+    @key();
+  }
+  @-o-keyframes @name {
+    @key();
+  }
+  @keyframes @name {
+    @key();
   }
 }
 
 .active-animate() {
-  -webkit-animation-name: border-color-breath;
-  -webkit-animation-duration: 5s;
-  -webkit-animation-iteration-count: infinite;
-
-  @-webkit-keyframes border-color-breath
-  {
-    .active-breath-ani();
-  }
-  @-moz-keyframes border-color-breath {
-    .active-breath-ani();
-  }
-  @-ms-keyframes border-color-breath {
-    .active-breath-ani();
-  }
-  @-o-keyframes border-color-breath {
-    .active-breath-ani();
-  }
-
+  .animation(border-color-breath,2s);
+  .keyframes(border-color-breath,{
+    0%
+    {
+      border-bottom-color: lighten(@selected-color,30%);
+    }
+    50%
+    {
+      border-bottom-color: lighten(@selected-color,10%);
+    }
+    100%
+    {
+      border-bottom-color: lighten(@selected-color,30%);
+    }
+  });
 }
 
 .controller {

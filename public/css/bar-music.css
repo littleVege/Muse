@@ -10,7 +10,8 @@
   top: -45px;
   left: 0;
 }
-.ctr-bar-wrap:hover {
+.ctr-bar-wrap:hover,
+.ctr-bar-wrap.pin {
   top: 0;
 }
 .ctr-bar {
@@ -46,51 +47,74 @@
   padding-bottom: 5px;
   border-bottom: 5px solid #1f66b1;
   -webkit-animation-name: border-color-breath;
-  -webkit-animation-duration: 5s;
+  -webkit-animation-duration: 2s;
   -webkit-animation-iteration-count: infinite;
+  -moz-animation-name: border-color-breath;
+  -moz-animation-duration: 2s;
+  -moz-animation-iteration-count: infinite;
+  -ms-animation-name: border-color-breath;
+  -ms-animation-duration: 2s;
+  -ms-animation-iteration-count: infinite;
+  -o-animation-name: border-color-breath;
+  -o-animation-duration: 2s;
+  -o-animation-iteration-count: infinite;
+  animation-name: border-color-breath;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
 }
 @-webkit-keyframes border-color-breath {
   0% {
-    border-bottom-color: #d7e7f8;
+    border-bottom-color: #80b3e9;
   }
   50% {
-    border-bottom-color: #5599e1;
+    border-bottom-color: #297fda;
   }
   100% {
-    border-bottom-color: #d7e7f8;
+    border-bottom-color: #80b3e9;
   }
 }
 @-moz-keyframes border-color-breath {
   0% {
-    border-bottom-color: #d7e7f8;
+    border-bottom-color: #80b3e9;
   }
   50% {
-    border-bottom-color: #5599e1;
+    border-bottom-color: #297fda;
   }
   100% {
-    border-bottom-color: #d7e7f8;
+    border-bottom-color: #80b3e9;
   }
 }
 @-ms-keyframes border-color-breath {
   0% {
-    border-bottom-color: #d7e7f8;
+    border-bottom-color: #80b3e9;
   }
   50% {
-    border-bottom-color: #5599e1;
+    border-bottom-color: #297fda;
   }
   100% {
-    border-bottom-color: #d7e7f8;
+    border-bottom-color: #80b3e9;
   }
 }
 @-o-keyframes border-color-breath {
   0% {
-    border-bottom-color: #d7e7f8;
+    border-bottom-color: #80b3e9;
   }
   50% {
-    border-bottom-color: #5599e1;
+    border-bottom-color: #297fda;
   }
   100% {
-    border-bottom-color: #d7e7f8;
+    border-bottom-color: #80b3e9;
+  }
+}
+@keyframes border-color-breath {
+  0% {
+    border-bottom-color: #80b3e9;
+  }
+  50% {
+    border-bottom-color: #297fda;
+  }
+  100% {
+    border-bottom-color: #80b3e9;
   }
 }
 .controller li.disable a {
