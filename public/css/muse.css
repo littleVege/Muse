@@ -186,11 +186,9 @@
   content: " ";
 }
 .main {
-
+  padding-top: 5px;
   min-height: 100px;
   height: 100%;
-  padding: auto;
-  padding-top: 5px;
 }
 .album {
   width: 150px;
@@ -199,12 +197,14 @@
   -moz-border-radius: 3px;
   -o-border-radius: 3px;
   border-radius: 3px;
-  -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
-  -o-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+  -o-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
   background: #ededed;
   display: inline-block;
+  float: left;
+  margin: 10px;
 }
 .ctr-bar-wrap {
   width: 100%;
