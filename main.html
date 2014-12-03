@@ -13,12 +13,12 @@
             <div class="col-7">
                 <ul class="controller">
                     <li><a class="icon-backward"></a></li>
-                    <li class="active"><a class="icon-pause"></a></li>
+                    <li class="active" id="play"><a class="icon-pause"></a></li>
                     <li><a class="icon-forward"></a></li>
                 </ul>
             </div>
             <div class="col-5 volume-wrap">
-                <div class="slider">
+                <div class="slider" id="volumeSlider">
                     <div class="bar">
                         <div class="handler"></div>
                     </div>
@@ -78,7 +78,6 @@
     <div class="album"></div>
     <div class="album"></div>
     <div class="album"></div>
-    <div class="album"></div>    <div class="album"></div>
     <div class="album"></div>
     <div class="album"></div>
     <div class="album"></div>
@@ -111,7 +110,10 @@
     <div class="album"></div>
     <div class="album"></div>
     <div class="album"></div>
-    <div class="album"></div>    <div class="album"></div>
+    <div class="album"></div>
+    <div class="album"></div>
+    <div class="album"></div>
+    <div class="album"></div>
     <div class="album"></div>
     <div class="album"></div>
     <div class="album"></div>
@@ -162,7 +164,7 @@
             items = $container.children();
             if (items.length>0) {
                 firstItem = items.eq(0);
-                itemWidth = firstItem.width()+margin*2;
+                itemWidth = firstItem.width()+margin*2+2;
                 cols = Math.floor(containerWidth /itemWidth);
                 lastWidth = containerWidth - (itemWidth * cols);
                 actualMargin = Math.floor(lastWidth / cols /2) + margin;
@@ -172,6 +174,51 @@
                 });
             }
         }).trigger('resize');
+        var $slider = $('#volumeSlider');
+        var sliderWidth = $slider.width();
+        var $bar = $slider.find('.bar');
+        var $handler = $slider.find('.handler');
+        var dragging = false;
+        $slider.on('click',function(e) {
+            if (dragging) {
+                return;
+            }
+            $bar.addClass('animate');
+            $bar.css('width', (e.offsetX/sliderWidth)*100+"%");
+            e.stopPropagation();
+        });
+        $handler.on('mousedown',function(e){
+            dragging = true;
+            e.stopPropagation();
+        }).on('mouseup',function(e){
+            dragging = false;
+            e.stopPropagation();
+        });
+        $(window).on('mousemove',function(e){
+
+            if (dragging) {
+                $bar.removeClass('animate');
+                var presentage = (e.offsetX/sliderWidth)*100;
+                if (presentage>100) {
+                    presentage = 100;
+                }
+                $bar.css('width', presentage+"%");
+                e.stopPropagation();
+            }
+
+        }).on('mouseup',function(e) {
+            if (dragging) {
+                dragging = false;
+            }
+            e.stopPropagation();
+        });
+        $('#play').on('click',function() {
+            if ($(this).is('.active')) {
+                $(this).removeClass('active').html('<a class="icon-play"></a>');
+            } else {
+                $(this).addClass('active').html('<a class="icon-pause"></a>');
+            }
+        });
     })
 </script>
 </body>

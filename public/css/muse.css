@@ -193,6 +193,7 @@
 .album {
   width: 150px;
   height: 150px;
+  border: 1px solid #676767;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   -o-border-radius: 3px;
@@ -400,10 +401,6 @@
   -moz-border-radius: 2px;
   -o-border-radius: 2px;
   border-radius: 2px;
-  -webkit-transition: width 0.3s ease 0;
-  -moz-transition: width 0.3s ease 0;
-  -o-transition: width 0.3s ease 0;
-  transition: width 0.3s ease 0;
 }
 .slider .bar:after,
 .slider .bar .clearfix {
@@ -412,6 +409,12 @@
 }
 .slider .bar:after {
   content: " ";
+}
+.slider .bar.animate {
+  -webkit-transition: width 0.3s ease 0;
+  -moz-transition: width 0.3s ease 0;
+  -o-transition: width 0.3s ease 0;
+  transition: width 0.3s ease 0;
 }
 .slider .handler {
   width: 20px;
