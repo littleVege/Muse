@@ -378,37 +378,36 @@
   content: " ";
 }
 .volume-wrap {
-  padding: 5px;
+  padding: 12.5px 20px;
 }
 .slider {
-  width: 100px;
-  height: 4px;
-  margin: 20px 10px;
-  background: #bcbcbc;
+  width: 100%;
+  max-width: 100px;
+  height: 20px;
+  margin: 0;
   display: inline-block;
+  position: relative;
+  cursor: pointer;
+}
+.slider:before,
+.slider .bar {
+  content: "";
+  display: block;
+  height: 4px;
+  top: 8px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   -o-border-radius: 2px;
   border-radius: 2px;
+  position: absolute;
+}
+.slider:before {
+  width: 100%;
+  background: #bcbcbc;
 }
 .slider .bar {
-  float: left;
-  height: 100%;
   background: #676767;
   width: 0;
-  position: relative;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  -o-border-radius: 2px;
-  border-radius: 2px;
-}
-.slider .bar:after,
-.slider .bar .clearfix {
-  clear: both;
-  display: table;
-}
-.slider .bar:after {
-  content: " ";
 }
 .slider .bar.animate {
   -webkit-transition: width 0.3s ease 0;
@@ -417,13 +416,13 @@
   transition: width 0.3s ease 0;
 }
 .slider .handler {
-  width: 20px;
-  height: 20px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -o-border-radius: 10px;
-  border-radius: 10px;
-  margin: -8px 0 0 -8px;
+  width: 15px;
+  height: 15px;
+  top: 2px;
+  -webkit-border-radius: 7.5px;
+  -moz-border-radius: 7.5px;
+  -o-border-radius: 7.5px;
+  border-radius: 7.5px;
   border: 1px solid #676767;
   -webkit-box-shadow: 1px 2px 3px 0 rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 1px 2px 3px 0 rgba(0, 0, 0, 0.1);
@@ -431,8 +430,25 @@
   box-shadow: 1px 2px 3px 0 rgba(0, 0, 0, 0.1);
   background: #ffffff;
   position: absolute;
-  right: 0;
 }
 .slider .handler:active {
-  background: #9a9a9a;
+  background: #b3b3b3;
+}
+.search {
+  height: 25px;
+  width: 100%;
+  max-width: 200px;
+  -webkit-border-radius: 13px;
+  -moz-border-radius: 13px;
+  -o-border-radius: 13px;
+  border-radius: 13px;
+  border: 1px solid #676767;
+  padding: 5px 13px;
+  font-size: 14px;
+}
+.search:focus {
+  -webkit-box-shadow: 0 0 5px 0 #1f66b1 inset;
+  -moz-box-shadow: 0 0 5px 0 #1f66b1 inset;
+  -o-box-shadow: 0 0 5px 0 #1f66b1 inset;
+  box-shadow: 0 0 5px 0 #1f66b1 inset;
 }
