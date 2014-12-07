@@ -5,10 +5,16 @@
     <title></title>
     <link rel="stylesheet" type="text/css" href="public/css/muse.css">
     <link rel="stylesheet" href="public/lib/font-awesome/css/font-awesome.min.css">
+    <style>
+        #inputFiles {
+            margin: 100px;
+        }
+    </style>
 </head>
 <body>
-<header class="ctr-bar-wrap">
+<header class="ctr-bar-wrap pin">
     <div class="ctr-bar">
+
         <div class="col-4">
             <div class="col-7">
                 <ul class="controller">
@@ -26,6 +32,7 @@
 
         </div>
         <div class="col-4 display-bar-wrap">
+            <audio id="audio"></audio>
             <div class="display-bar">
                 <h2>MUSIC</h2>
                 <p>Angela Aki --- Home</p>
@@ -39,122 +46,50 @@
         </div>
     </div>
 </header>
-<div class="container-fluid main" id="main">
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
-    <div class="album"></div>
+<input type="file" webkitdirectory mozdirctory directory multiple  id="inputFiles">
 
+<div class="container-fluid main" id="main">
 </div>
 
 <script src="public/lib/jquery/jquery-min.js"></script>
 <script src="public/lib/backbone/underscore-min.js"></script>
+<script src="public/lib/backbone/backbone-min.js"></script>
+<script src="public/lib/id3/id3.min.js"></script>
+
+<script src="public/js/model.js"></script>
+<script src="public/js/controller.js"></script>
 <script>
+    function rangeSlider(id, onDrag) {
+
+        var range = document.getElementById(id),
+                rangeWidth, rangeLeft;
+
+        function updateDragger(e) {
+            if (e.pageX >= rangeLeft && e.pageX <= (rangeLeft + rangeWidth)) {
+                if (typeof onDrag == "function") {
+                    onDrag(Math.round(((e.pageX - rangeLeft) / rangeWidth) * 100));
+                }
+            }
+        }
+        function onMouseup() {
+            document.removeEventListener("mousemove", updateDragger);
+            document.removeEventListener('mouseup',onMouseup);
+        }
+        range.addEventListener("mousedown", function(e) {
+            rangeWidth = this.offsetWidth;
+            rangeLeft = this.offsetLeft;
+            document.addEventListener("mousemove", updateDragger);
+            document.addEventListener("mouseup", onMouseup);
+            updateDragger(e);
+            return false;
+        });
+    }
     $(function() {
+        var muse = new Muse();
+
         var $container = $('#main');
         var margin = 10;
+
         $(window).resize(function() {
             var containerWidth,items,itemWidth,
                 firstItem,cols,actualMargin,lastWidth;
@@ -173,35 +108,10 @@
             }
         }).trigger('resize');
         var $slider = $('#volumeSlider');
-        var sliderWidth = $slider.width();
         var $bar = $slider.find('.bar');
         var $handler = $slider.find('.handler');
 
-        function rangeSlider(id, onDrag) {
 
-            var range = document.getElementById(id),
-                    rangeWidth, rangeLeft;
-
-            function updateDragger(e) {
-                if (e.pageX >= rangeLeft && e.pageX <= (rangeLeft + rangeWidth)) {
-                    if (typeof onDrag == "function") {
-                        onDrag(Math.round(((e.pageX - rangeLeft) / rangeWidth) * 100));
-                    }
-                }
-            }
-            function onMouseup() {
-                document.removeEventListener("mousemove", updateDragger);
-                document.removeEventListener('mouseup',onMouseup);
-            }
-            range.addEventListener("mousedown", function(e) {
-                rangeWidth = this.offsetWidth;
-                rangeLeft = this.offsetLeft;
-                document.addEventListener("mousemove", updateDragger);
-                document.addEventListener("mouseup", onMouseup);
-                updateDragger(e);
-                return false;
-            });
-        }
 
         $('#play').on('click',function() {
             if ($(this).is('.active')) {
@@ -214,7 +124,26 @@
         rangeSlider('volumeSlider',function(val) {
             $bar.css('width',val+"%");
             $handler.css('left',val+"%");
-        })
+        });
+
+        $('#inputFiles').on('change',function(e) {
+            var $music,key,cnt,$main,file;
+            $main = $('#main');
+            for (key=0,cnt=this.files.length;key<cnt;key++) {
+                file = this.files[key];
+                muse.addSong(file);
+            }
+        });
+
+        $container.delegate('.album','click',function(e) {
+            $('#audio').attr('src',$(this).attr('data-path'))[0].play();
+
+        });
+
+
+
+
+
     });
 </script>
 </body>

@@ -190,7 +190,15 @@
   min-height: 100px;
   height: 100%;
 }
+.cover {
+  background: #ededed;
+}
 .album {
+  display: inline-block;
+  float: left;
+  margin: 10px;
+}
+.album .cover {
   width: 150px;
   height: 150px;
   border: 1px solid #676767;
@@ -202,10 +210,17 @@
   -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
   -o-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
-  background: #ededed;
-  display: inline-block;
-  float: left;
-  margin: 10px;
+}
+.album .abstract {
+  text-align: center;
+}
+.album .abstract h4 {
+  color: #676767;
+  font-size: 14px;
+}
+.album .abstract p {
+  color: #9a9a9a;
+  font-size: 10px;
 }
 .ctr-bar-wrap {
   width: 100%;
@@ -222,6 +237,7 @@
 .ctr-bar-wrap:hover,
 .ctr-bar-wrap.pin {
   top: 0;
+  position: relative;
 }
 .ctr-bar {
   width: 100%;
