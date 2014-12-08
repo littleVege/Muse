@@ -36,8 +36,8 @@
             <div class="display-bar">
                 <h2>MUSIC</h2>
                 <p>Angela Aki --- Home</p>
-                <div class="progress">
-                    <div class="bar" style="width: 30%"></div>
+                <div class="progress" id="playProgress">
+                    <div class="bar"></div>
                 </div>
             </div>
         </div>
@@ -58,6 +58,7 @@
 
 <script src="public/js/model.js"></script>
 <script src="public/js/controller.js"></script>
+<script src="public/js/view.js"></script>
 <script>
     function rangeSlider(id, onDrag) {
 
@@ -86,44 +87,39 @@
     }
     $(function() {
         var muse = new Muse();
+        var albumsView = new AlbumListView(muse.albums);
 
-        var $container = $('#main');
-        var margin = 10;
+        var $audio = $('#audio');
+        var $progress = $('#playProgress');
 
-        $(window).resize(function() {
-            var containerWidth,items,itemWidth,
-                firstItem,cols,actualMargin,lastWidth;
-            containerWidth = $container.innerWidth();
-            items = $container.children();
-            if (items.length>0) {
-                firstItem = items.eq(0);
-                itemWidth = firstItem.width()+margin*2+2;
-                cols = Math.floor(containerWidth /itemWidth);
-                lastWidth = containerWidth - (itemWidth * cols);
-                actualMargin = Math.floor(lastWidth / cols /2) + margin;
-                items.each(function(idx,item) {
-                    var $item = $(item);
-                    $item.css('margin',actualMargin+"px");
-                });
-            }
-        }).trigger('resize');
+
         var $slider = $('#volumeSlider');
         var $bar = $slider.find('.bar');
         var $handler = $slider.find('.handler');
 
-
-
         $('#play').on('click',function() {
             if ($(this).is('.active')) {
                 $(this).removeClass('active').html('<a class="icon-play"></a>');
+                $audio[0].pause();
             } else {
                 $(this).addClass('active').html('<a class="icon-pause"></a>');
+                $audio[0].play();
             }
         });
-
+        var $progressBar = $progress.find('.bar');
+        $audio.on('timeupdate',function() {
+            var duration = this.duration,
+                curTime = this.currentTime,
+                percentage = Math.floor(curTime/duration * 100);
+            var percentWidth = parseInt($progressBar.css('width'));
+            if (percentage !== percentWidth) {
+                $progressBar.css("width",percentage + "%");
+            }
+        });
         rangeSlider('volumeSlider',function(val) {
             $bar.css('width',val+"%");
             $handler.css('left',val+"%");
+            $audio[0].volume = val/100;
         });
 
         $('#inputFiles').on('change',function(e) {
@@ -134,16 +130,6 @@
                 muse.addSong(file);
             }
         });
-
-        $container.delegate('.album','click',function(e) {
-            $('#audio').attr('src',$(this).attr('data-path'))[0].play();
-
-        });
-
-
-
-
-
     });
 </script>
 </body>

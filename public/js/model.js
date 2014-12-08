@@ -87,7 +87,7 @@ var getObjectUrl = function(file) {
 
 var ArtistList = Backbone.Collection.extend({
     model:Artist,
-    findOrAdd:function(name) {
+    upset:function(name) {
         var artist;
         if (!name) {
             name = 'anonymous';
@@ -104,7 +104,7 @@ var ArtistList = Backbone.Collection.extend({
 });
 var AlbumList = Backbone.Collection.extend({
     model:Album,
-    findOrAdd:function(name) {
+    upset:function(name) {
         var album;
         if (!name) {
             name = 'anonymous';

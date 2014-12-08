@@ -13,9 +13,9 @@ var Muse = Backbone.Model.extend({
             var song = new Song({file:file});
             song.readTags(function(tags) {
                 var id3 = song.get('tags');
-                var artist = this.artists.findOrAdd(id3.artist);
-                var album = this.albums.findOrAdd(id3.album);
-                album.add(song);
+                var artist = this.artists.upset(id3.artist);
+                var album = this.albums.upset(id3.album);
+                album.addSong(song);
                 artist.addSong(song);
                 artist.addAlbum(album);
             },this);
