@@ -18,15 +18,15 @@
         <div class="col-4">
             <div class="col-7">
                 <ul class="controller">
-                    <li><a class="icon-backward"></a></li>
-                    <li class="active" id="play"><a class="icon-pause"></a></li>
-                    <li><a class="icon-forward"></a></li>
+                    <li><a class="icon-backward" id="prev"></a></li>
+                    <li><a class="icon-play" id="play"></a></li>
+                    <li><a class="icon-forward" id="next"></a></li>
                 </ul>
             </div>
             <div class="col-5 volume-wrap">
                 <div class="slider" id="volumeSlider">
-                    <div class="bar"></div>
-                    <div class="handler"></div>
+                    <div class="bar" style="width: 100%"></div>
+                    <div class="handler" style="left: 100%"></div>
                 </div>
             </div>
 
@@ -42,7 +42,7 @@
             </div>
         </div>
         <div class="col-4">
-            <input type="text" class="search">
+
         </div>
     </div>
 </header>
@@ -51,10 +51,16 @@
 <div class="container-fluid main" id="main">
 </div>
 
+<div class="playlist-modal" id="playlist">
+    <img class="cover">
+</div>
+
+<div class="backdrop" id="backdrop"></div>
+<div class="popover" id="infoPop"></div>
 <script src="public/lib/jquery/jquery-min.js"></script>
 <script src="public/lib/backbone/underscore-min.js"></script>
 <script src="public/lib/backbone/backbone-min.js"></script>
-<script src="public/lib/id3/id3.min.js"></script>
+<script src="public/lib/jsId3/id3-min.js"></script>
 
 <script src="public/js/model.js"></script>
 <script src="public/js/controller.js"></script>
@@ -86,9 +92,9 @@
         });
     }
     $(function() {
-        var muse = new Muse();
+        window.muse = new Muse();
         var albumsView = new AlbumListView(muse.albums);
-
+        var loadView = new MuseLoaderView();
         var $audio = $('#audio');
         var $progress = $('#playProgress');
 
@@ -98,14 +104,19 @@
         var $handler = $slider.find('.handler');
 
         $('#play').on('click',function() {
-            if ($(this).is('.active')) {
-                $(this).removeClass('active').html('<a class="icon-play"></a>');
+            if (!$audio[0].paused) {
                 $audio[0].pause();
             } else {
-                $(this).addClass('active').html('<a class="icon-pause"></a>');
                 $audio[0].play();
             }
         });
+
+        $audio.on('play',function() {
+            $('#play').addClass('active').addClass('icon-pause').removeClass('icon-play');
+        }).on('ended pause',function(){
+            $('#play').addClass('icon-play').removeClass('icon-pause').removeClass('active');
+        });
+
         var $progressBar = $progress.find('.bar');
         $audio.on('timeupdate',function() {
             var duration = this.duration,
@@ -125,11 +136,15 @@
         $('#inputFiles').on('change',function(e) {
             var $music,key,cnt,$main,file;
             $main = $('#main');
-            for (key=0,cnt=this.files.length;key<cnt;key++) {
-                file = this.files[key];
-                muse.addSong(file);
-            }
+            muse.loadSongs(this.files);
         });
+
+        $('#prev').click(function(){
+            muse.playPrev();
+        });
+        $('#next').click(function(){
+            muse.playNext();
+        })
     });
 </script>
 </body>

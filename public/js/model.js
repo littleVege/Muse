@@ -5,7 +5,8 @@
 var Song = Backbone.Model.extend({
     defaults:{
         path:"undefined",
-        title:"no title"
+        title:"no title",
+        tagLoaded:false
     },
     initialize:function() {
         var file = this.get('file');
@@ -16,18 +17,60 @@ var Song = Backbone.Model.extend({
             context = this;
         }
         (function(song) {
-            id3(song.get('file'), function(err,tags) {
+            var file = song.get('file');
+            var url = file.urn||file.name;
+            var reader = FileAPIReader(file);
+            ID3.loadTags(url, function() {
+                var tags = ID3.getAllTags(url);
                 song.set('title',tags.title);
-                song.set('tags',tags);
+                song.set('tags',{
+                    album:tags.album,
+                    artist:tags.artist,
+                    year:tags.year
+                });
+                if( "picture" in tags ) {
+                    var image = tags.picture;
+                    var img = "data:" + image.format + ";base64," + window.btoa(base64Str(image.data));
+                    var imgIdx = null;
+                    for (var i=0;i<ImgSet.length;i++) {
+                        if (ImgSet[i]===img) {
+                            imgIdx = i;
+                            break;
+                        }
+                    }
+                    if (imgIdx===null) {
+                        ImgSet.push(img);
+                        imgIdx = ImgSet.length-1;
+                    }
+                    song.set('imgIndex',imgIdx);
+                }
+                song.set('tagLoaded',true);
                 callback.call(context,tags);
+                song.unset('file');
+            },{
+                tags: ["artist", "title", "album", "year", "picture"],
+                dataReader:reader
             });
         })(this);
     }
 });
 
+function base64Str(source) {
+    var base64String = "",
+        idx,len;
+    for (idx=0,len = source.length; idx<len; idx++) {
+        base64String += String.fromCharCode(source[idx]);
+    }
+    return base64String;
+}
+
 var Album = Backbone.Model.extend({
     initialize:function() {
         this.musicList = new MusicList();
+        this.musicList.once('add',function() {
+            var imgIndex = this.musicList.at(0).get('imgIndex');
+            this.set('imgIndex',imgIndex);
+        },this);
     },
     addSong:function(music) {
         this.musicList.add(music);
@@ -52,21 +95,6 @@ var Artist = Backbone.Model.extend({
 
 var MusicList = Backbone.Collection.extend({
     model:Song
-});
-
-var PlayList = Backbone.Collection.extend({
-    _currentMusic:null,
-    next:function() {
-
-    },
-    prev:function() {
-
-    },
-    current:function(idx) {
-        if (!this._currentMusic) {
-            this._currentMusic = this.get(0);
-        }
-    }
 });
 
 var getObjectUrl = function(file) {
@@ -119,3 +147,4 @@ var AlbumList = Backbone.Collection.extend({
         return album;
     }
 });
+
