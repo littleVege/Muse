@@ -5,7 +5,7 @@
 var Muse = Backbone.Model.extend({
     defaults:{
         playlist:null,
-        current:0,
+        current:-1,
         unload:0
     },
     initialize:function() {
@@ -18,11 +18,11 @@ var Muse = Backbone.Model.extend({
             });
         })(this);
         this.on('change:playlist',function() {
-            this.set('current',0);
+            this.set('current',-1);
         });
     },
     addSong:function(file) {
-        if (/(mp3)|(ogg)/ig.test(file.type)) {
+        if (/(mp3)|(ogg)|(mpeg)/ig.test(file.type)) {
             var song = new Song({file:file});
             song.readTags(function(tags) {
                 var id3 = song.get('tags');
@@ -50,7 +50,7 @@ var Muse = Backbone.Model.extend({
         }
         if (playlist.length<=index) {
             this.$audio[0].pause();
-            this.set('current',this.playlist.length-1);
+            this.set('current',playlist.length-1);
             return;
         } else if (index<0) {
             this.$audio[0].pause();
@@ -78,23 +78,6 @@ var Muse = Backbone.Model.extend({
     }
 });
 
-var MuseLoaderView = Backbone.View.extend({
-    el:$('#infoPop')[0],
-    initialize:function() {
-        muse.on('change:unload',function() {
-            var unloadCnt;
-            unloadCnt = muse.get('unload');
-            if (this.$el.is(':hidden')&&unloadCnt>0) {
-                this.$el.show();
-                $('#backdrop').show();
-            }
-            if (unloadCnt<1) {
-                this.$el.hide();
-                $('#backdrop').hide();
-            }
-            this.$el.html('<p>have '+unloadCnt+' need load</p>');
-        },this);
-    }
-});
+
 
 var ImgSet = [];

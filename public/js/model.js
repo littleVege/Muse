@@ -11,6 +11,7 @@ var Song = Backbone.Model.extend({
     initialize:function() {
         var file = this.get('file');
         this.set('path',getObjectUrl(file));
+        localStorage[file.name] = this.get('path');
     },
     readTags:function(callback,context) {
         if (!context) {

@@ -2,20 +2,15 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>Muse -- a html5 mp3 music player for chrome</title>
     <link rel="stylesheet" type="text/css" href="public/css/muse.css">
     <link rel="stylesheet" href="public/lib/font-awesome/css/font-awesome.min.css">
-    <style>
-        #inputFiles {
-            margin: 100px;
-        }
-    </style>
 </head>
 <body>
 <header class="ctr-bar-wrap pin">
     <div class="ctr-bar">
 
-        <div class="col-4">
+        <div class="col-4 controller-wrap">
             <div class="col-7">
                 <ul class="controller">
                     <li><a class="icon-backward" id="prev"></a></li>
@@ -23,7 +18,7 @@
                     <li><a class="icon-forward" id="next"></a></li>
                 </ul>
             </div>
-            <div class="col-5 volume-wrap">
+            <div class="col-5">
                 <div class="slider" id="volumeSlider">
                     <div class="bar" style="width: 100%"></div>
                     <div class="handler" style="left: 100%"></div>
@@ -33,20 +28,28 @@
         </div>
         <div class="col-4 display-bar-wrap">
             <audio id="audio"></audio>
-            <div class="display-bar">
-                <h2>MUSIC</h2>
-                <p>Angela Aki --- Home</p>
+            <div class="display-bar" id="displayBar">
+                <h2></h2>
+                <p></p>
                 <div class="progress" id="playProgress">
                     <div class="bar"></div>
                 </div>
             </div>
         </div>
-        <div class="col-4">
-
+        <div class="col-4 search-bar">
+            <div class="col-4">
+                <div class="input-files">
+                    <i class="icon-folder-open-alt"></i>
+                    <input type="file" webkitdirectory mozdirctory directory multiple  id="inputFiles">
+                </div>
+            </div>
+            <div class="col-8">
+                <input type="text" class="search">
+            </div>
         </div>
     </div>
 </header>
-<input type="file" webkitdirectory mozdirctory directory multiple  id="inputFiles">
+
 
 <div class="container-fluid main" id="main">
 </div>
@@ -91,10 +94,12 @@
             return false;
         });
     }
+
     $(function() {
         window.muse = new Muse();
         var albumsView = new AlbumListView(muse.albums);
-        var loadView = new MuseLoaderView();
+        //var loadView = new MuseLoaderView();
+        new DisplayBarView(muse);
         var $audio = $('#audio');
         var $progress = $('#playProgress');
 
@@ -132,7 +137,6 @@
             $handler.css('left',val+"%");
             $audio[0].volume = val/100;
         });
-
         $('#inputFiles').on('change',function(e) {
             var $music,key,cnt,$main,file;
             $main = $('#main');

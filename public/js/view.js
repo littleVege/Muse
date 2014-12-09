@@ -20,20 +20,17 @@ var AlbumView = Backbone.View.extend({
         var artistName;
         var artist = this.model.get('artist');
         var albumName = this.model.get('name');
-        if (albumName.length>20) {
-            albumName = albumName.substr(0,8)+'...'+albumName.substr(albumName.length-9,9);
-        }
         artist? artistName = artist.get('name'):artistName="anonymous";
         this.$el.html(this.template({
-            name:albumName,
-            artist:artistName,
-            fullName:this.model.get('name'),
+            name:getShorterStr(albumName),
+            artist:getShorterStr(artistName),
+            fullName:albumName,
             img:ImgSet[this.model.get('imgIndex')]
         }));
         $(window).trigger('resize');
     },
     template: _.template (
-        '<img class="cover" title="<%= fullName %>" alt="<%= fullName %>" src="<%= img %>">' +
+        '<img class="cover" title="<%= fullName %>" src="<%= img %>">' +
         '<div class="abstract">' +
             '<h4><%= name %></h4>' +
             '<p><%= artist %></p>' +
@@ -46,6 +43,16 @@ var AlbumView = Backbone.View.extend({
     }
 });
 
+function getShorterStr(text) {
+    if (!text) {
+        return "";
+    }
+    var textLen = calStrLenght(text);
+    if (textLen>20) {
+        text = text.substr(0,8)+'...'+text.substr(textLen-9,9);
+    }
+    return text;
+}
 
 var AlbumListView = Backbone.View.extend({
     el:$('#main')[0],
@@ -134,3 +141,57 @@ var PlayListSongView = Backbone.View.extend({
         this.song.view = null;
     }
 });
+
+var DisplayBarView = Backbone.View.extend({
+    el:$('#displayBar')[0],
+    initialize:function(muse) {
+        this.controller = muse;
+        muse.on('change:current',function(muse,index) {
+            var song = this.controller.get('playlist').at(index);
+            this.render(song);
+        },this);
+    },
+    render:function(song) {
+        var artistName,albumName,title,abstract;
+        if (song) {
+            artistName = song.get('artist').get('name');
+            albumName = song.get('album').get('name');
+            title = song.get('title');
+            abstract = artistName+' -- '+albumName;
+        } else {
+            title = "";
+            abstract = "";
+        }
+        this.$el.find('h2').html(title);
+        this.$el.find('p').text(abstract);
+    }
+});
+
+var MuseLoaderView = Backbone.View.extend({
+    el:$('#infoPop')[0],
+    initialize:function() {
+        muse.on('change:unload',function() {
+            var unloadCnt;
+            unloadCnt = muse.get('unload');
+            if (this.$el.is(':hidden')&&unloadCnt>0) {
+                this.$el.show();
+                $('#backdrop').show();
+            }
+            if (unloadCnt<1) {
+                this.$el.hide();
+                $('#backdrop').hide();
+            }
+            this.$el.html('<p>have '+unloadCnt+' need load</p>');
+        },this);
+    }
+});
+
+function calStrLenght(str) {
+    var realLength = 0, len = str.length, charCode = -1;
+    for (var i = 0; i < len; i++) {
+        charCode = str.charCodeAt(i);
+        if (charCode >= 0 && charCode <= 128) realLength += 1;
+        else realLength += 2;
+    }
+    return realLength;
+}
