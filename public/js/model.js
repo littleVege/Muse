@@ -8,7 +8,7 @@ var Song = Backbone.Model.extend({
         title:"no title",
         tagLoaded:false
     },
-    initialize:function() {
+    initialize:function(attrs) {
         var file = this.get('file');
         this.set('path',getObjectUrl(file));
         localStorage[file.name] = this.get('path');

@@ -32,6 +32,7 @@ var Muse = Backbone.Model.extend({
                 artist.addSong(song);
                 artist.addAlbum(album);
                 var loaded = this.get('unload');
+                loaded = loaded||0;
                 this.set('unload',--loaded);
             },this);
         }
@@ -40,6 +41,9 @@ var Muse = Backbone.Model.extend({
         var fileLen = files.length;
         this.set('unload',fileLen);
         _.each(files,function(file,index) {
+            if (Object.prototype.toString.call(file)==="[object string]") {
+                file = new File(file);
+            }
             this.addSong(file);
         },this);
     },
