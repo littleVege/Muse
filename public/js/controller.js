@@ -12,18 +12,22 @@ var Muse = Backbone.Model.extend({
         this.artists = new ArtistList();
         this.albums = new AlbumList();
         this.$audio = $('#audio');
+        this.playlistModal = new PlayListModalView();
         (function(muse){
             muse.$audio.on('ended',function(e) {
                 muse.playNext();
             });
         })(this);
         this.on('change:playlist',function() {
-            this.set('current',-1);
+            this.set('current',0);
         });
     },
     addSong:function(file) {
         if (/(mp3)|(ogg)|(mpeg)/ig.test(file.type)) {
+            var unload = this.get('unload');
+            this.set('unload',++unload);
             var song = new Song({file:file});
+
             song.readTags(function(tags) {
                 var id3 = song.get('tags');
                 var artist = this.artists.upset(id3.artist);
@@ -31,15 +35,12 @@ var Muse = Backbone.Model.extend({
                 album.addSong(song);
                 artist.addSong(song);
                 artist.addAlbum(album);
-                var loaded = this.get('unload');
-                loaded = loaded||0;
-                this.set('unload',--loaded);
+                this.set('unload',--unload);
+
             },this);
         }
     },
     loadSongs:function(files) {
-        var fileLen = files.length;
-        this.set('unload',fileLen);
         _.each(files,function(file,index) {
             if (Object.prototype.toString.call(file)==="[object string]") {
                 file = new File(file);
