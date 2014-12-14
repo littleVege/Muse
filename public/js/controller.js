@@ -27,7 +27,6 @@ var Muse = Backbone.Model.extend({
             var unload = this.get('unload');
             this.set('unload',++unload);
             var song = new Song({file:file});
-
             song.readTags(function(tags) {
                 var id3 = song.get('tags');
                 var artist = this.artists.upset(id3.artist);
@@ -36,7 +35,6 @@ var Muse = Backbone.Model.extend({
                 artist.addSong(song);
                 artist.addAlbum(album);
                 this.set('unload',--unload);
-
             },this);
         }
     },

@@ -103,7 +103,7 @@
         window.muse = new Muse();
         var albumsView = new AlbumListView(muse.albums);
         //var loadView = new MuseLoaderView();
-        new DisplayBarView(muse);
+        new DisplayBarView({muse:muse});
         var $audio = $('#audio');
         var $progress = $('#playProgress');
         var $slider = $('#volumeSlider');

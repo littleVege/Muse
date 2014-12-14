@@ -55,6 +55,10 @@
   -moz-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.3);
   -o-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.3);
   box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.3);
+  -webkit-transition: all 0.3s ease 0;
+  -moz-transition: all 0.3s ease 0;
+  -o-transition: all 0.3s ease 0;
+  transition: all 0.3s ease 0;
 }
 .playlist-modal .cover {
   width: 100%;
@@ -92,6 +96,7 @@
 .playlist-modal .playlist li a .index {
   float: left;
   padding: 0 10px;
+  width: 40px;
 }
 .playlist-modal .playlist li a .duration {
   float: right;
@@ -130,4 +135,8 @@
   top: 0;
   z-index: 600;
   display: none;
+  -webkit-transition: all 0.3s ease 0;
+  -moz-transition: all 0.3s ease 0;
+  -o-transition: all 0.3s ease 0;
+  transition: all 0.3s ease 0;
 }

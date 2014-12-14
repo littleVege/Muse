@@ -116,7 +116,10 @@ var PlaylistView = Backbone.View.extend({
     renderSong:function(song) {
         var songView = song.view;
         if (!songView) {
-            songView = new PlaylistSongView(this,song);
+            songView = new PlaylistSongView({
+                playlist:this.playlist,
+                song:song
+            });
             song.view = songView;
         }
         this.$el.append(song.view.$el);
@@ -128,9 +131,9 @@ var PlaylistView = Backbone.View.extend({
 
 var PlaylistSongView = Backbone.View.extend({
     tagName:'li',
-    initialize:function(playlist,song) {
-        this.playlist = playlist;
-        this.song = song;
+    initialize:function(params) {
+        this.playlist = params.playlist;
+        this.song = params.song;
         this.playlist.on('sort',function() {
             this.render();
         },this);
@@ -140,18 +143,18 @@ var PlaylistSongView = Backbone.View.extend({
         this.render();
     },
     render:function() {
-        var index = this.song.get('index');
+        var index = this.playlist.indexOf(this.song);
         var title = this.song.get('title');
         var duration = this.song.get('duration');
         if (!duration) {
             duration = getDuration(this.song.get('path'));
             this.song.set('duration',duration);
         }
-        this.template ({
+        this.$el.html(this.template ({
             index:index,
             title:title,
             duration:duration
-        });
+        }));
     },
     template: _.template (
         '<a>' +
@@ -199,9 +202,9 @@ var PlayListModalView = Backbone.View.extend({
 
 var DisplayBarView = Backbone.View.extend({
     el:$('#displayBar')[0],
-    initialize:function(muse) {
-        this.controller = muse;
-        muse.on('change:current',function(muse,index) {
+    initialize:function(params) {
+        this.controller = params.muse;
+        this.controller.on('change:current',function(muse,index) {
             var song = this.controller.get('playlist').at(index);
             this.render(song);
         },this);
